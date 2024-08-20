@@ -1,0 +1,122 @@
+basePath: /
+definitions:
+  models.Error:
+    description: Error structure
+    properties:
+      message:
+        type: string
+    type: object
+  models.Item:
+    description: Item's description
+    properties:
+      create_time:
+        description: '@example field tag используется для примера значений'
+        example: "2024-08-21T14:00:00Z"
+        type: string
+      id:
+        description: '@example field tag используется для примера значений'
+        example: "1"
+        type: string
+      name:
+        description: '@example field tag используется для примера значений'
+        example: TV-set
+        type: string
+    type: object
+  models.ItemRequest:
+    description: Item creation request
+    properties:
+      name:
+        type: string
+    type: object
+  models.ItemResponse:
+    description: Item response
+    properties:
+      id:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: sample@email.com
+    name: Michael G.
+    url: https://github.com/idalgo-2021
+  description: API description
+  title: Example API(by idalgo-2021)
+  version: "1.0"
+paths:
+  /items:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all items
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of items
+          schema:
+            items:
+              $ref: '#/definitions/models.Item'
+            type: array
+        "404":
+          description: No items available
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Get all items
+      tags:
+      - items
+    post:
+      consumes:
+      - application/json
+      description: Create a new item by providing a name
+      parameters:
+      - description: Item details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.ItemRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ID of the created item
+          schema:
+            $ref: '#/definitions/models.ItemResponse'
+        "400":
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Create a new item
+      tags:
+      - items
+  /items/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get the item with the specified ID
+      parameters:
+      - description: Item ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Item description
+          schema:
+            $ref: '#/definitions/models.Item'
+        "404":
+          description: Item not found
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Get an item by its ID
+      tags:
+      - items
+swagger: "2.0"
